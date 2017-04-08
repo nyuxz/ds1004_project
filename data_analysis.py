@@ -5,6 +5,7 @@ import pickle
 from operator import add
 from pyspark import SparkContext
 from csv import reader
+import datetime
 
 def groupby_and_count(df, col_idx):
     """
@@ -73,7 +74,17 @@ if __name__ == "__main__":
     #        if item[0] == "":
     #            print(key, item)
 
-    all_columns = ["BORO_NM",  # 463 blank, 6 vals
+
+    xzhang_columns = ['CMPLNT_FR_DT', # 655 null 
+                      'CMPLNT_FR_TM', # 45 null
+                      'CMPLNT_TO_DT', # 1391478 null
+                      'CMPLNT_TO_TM', # 1387785 null
+                      'RPT_DT', # 0 null
+                      'LOC_OF_OCCUR_DESC', # 1127128 " ", 213 "  "
+                      'PREM_TYP_DESC' ] # 33279 null
+
+
+    all_column = ["BORO_NM",  # 463 blank, 6 vals
                    "ADDR_PCT_CD", # 390 blank, 78 vals
                    "PARKS_NM", # 5093632 blank, 864 vals
                    "HADEVELOPT", # 4848026 blank, 279 vals
@@ -98,7 +109,7 @@ if __name__ == "__main__":
                    "LOC_OF_OCCUR_DESC",
                    "PREM_TYP_DESC"]
     #all_dict = {}
-    #for col in all_columns:
+    #for col in all_column:
     #    all_dict[col] = groupby_and_count(df, col2idx[col]).collect()
 
     #with open('all_dict', 'wb') as f:
@@ -146,7 +157,14 @@ if __name__ == "__main__":
                  "PD_DESC":[""],
                  "CRM_ATPT_CPTD_CD":[""],
                  "LAW_CAT_CD":[""],
-                 "JURIS_DESC":[""]}
+                 "JURIS_DESC":[""],
+                 "CMPLNT_FR_DT":[""],
+                 "CMPLNT_FR_TM":[""],
+                 "CMPLNT_TO_DT":[""],
+                 "CMPLNT_TO_TM":[""],
+                 "RPT_DT":[""],
+                 "LOC_OF_OCCUR_DESC":[""],
+                 "PREM_TYP_DESC":[""]}
 
     # column check function
     def general_check_col_func(check_null_func, check_valid_func, row, col_idx):
@@ -212,6 +230,106 @@ if __name__ == "__main__":
         else:
             return True
 
+
+    def check_FR_DT(row, col_idx):
+        FR_numbers = row[col_idx].split("/")
+        if len(FR_numbers) != 3:
+            return False
+        try:
+            newDate = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]))
+            return True
+        except ValueError:
+            return False
+        if newDate.year < 2006 or newDate.year > 2015 :
+            return False
+
+
+    def check_TO_DT(row, col_idx):
+        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
+        TO_numbers = row[col_idx].split("/")
+        if len(TO_numbers) != 3:
+            return False
+        try:
+            newDate = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]))
+            return True
+        except ValueError:
+            return False
+        fr_dt = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]))
+        to_dt = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]))
+        if not fr_dt < to_dt:
+            return False 
+        if newDate.year < 2006 or newDate.year > 2015 :
+            return False
+
+
+    def check_RPT_DT(row, col_idx):
+        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
+        RPT_numbers = row[col_idx].split("/")
+        if len(RPT_numbers) != 3:
+            return False
+        try:
+            newDate = datetime.datetime(int(RPT_numbers[2]),int(RPT_numbers[0]),int(RPT_numbers[1]))
+            return True
+        except ValueError:
+            return False
+        fr_dt = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]))
+        rpt_dt = datetime.datetime(int(RPT_numbers[2]),int(RPT_numbers[0]),int(RPT_numbers[1]))
+        if not fr_dt < rpt_dt:
+            return False
+        if newDate.year < 2006 or newDate.year > 2015 :
+            return False 
+
+
+    def check_FR_TM(row, col_idx):
+        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
+        FR_TM_numbers = row[col_idx].split(":")
+        if len(FR_numbers) != 3:
+            return False
+        if len(FR_TM_numbers) != 3:
+            return False
+        try:
+            newDate = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]),int(FR_TM_numbers[0]),int(FR_TM_numbers[1]),int(FR_TM_numbers[2]))
+            return True
+        except ValueError:
+            return False
+        if newDate.year < 2006 or newDate.year > 2015 :
+            return False
+
+            
+    def check_TO_TM(row, col_idx):
+        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
+        FR_TM_numbers = row[col2idx["CMPLNT_FR_TM"]].split(":")
+        TO_numbers = row[col2idx["CMPLNT_TO_DT"]].split("/")
+        TO_TM_numbers = row[col_idx].split(":")
+        if len(FR_TM_numbers) != 3:
+            return False
+        if len(FR_numbers) != 3:
+            return False
+        if len(TO_numbers) != 3:
+            return False
+        if len(TO_TM_numbers) != 3:
+            return False
+        try:
+            newDate = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]),int(TO_TM_numbers[0]),int(TO_TM_numbers[1]),int(TO_TM_numbers[2]))
+            return True
+        except ValueError:
+            return False
+        fr_tm = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]),int(FR_TM_numbers[0]),int(FR_TM_numbers[1]),int(FR_TM_numbers[2]))
+        to_tm = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]),int(TO_TM_numbers[0]),int(TO_TM_numbers[1]),int(TO_TM_numbers[2]))
+        if not fr_tm < to_tm:
+            return False
+        if newDate.year < 2006 or newDate.year > 2015 :
+            return False
+
+    def check_LOC_DESC(row, col_idx):
+        if not format_re_dict["TEXT"](row, col_idx):
+            return False
+
+    def check_PREM_DESC(row, col_idx):
+        if not format_re_dict["TEXT"](row, col_idx):
+            return False
+
+
     check_col_func_dict = {
                         # valid text + within 5 district
                         "BORO_NM": lambda row, col_idx: general_check_col_func(general_check_null_func,
@@ -263,7 +381,23 @@ if __name__ == "__main__":
                                                                                   format_re_dict["TEXT"], row, col_idx),
                         # any valid string
                         "JURIS_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                  format_re_dict["TEXT"], row, col_idx)}
+                                                                                  format_re_dict["TEXT"], row, col_idx),
+                        "CMPLNT_FR_DT": lambda row, col_idx: general_check_col_func(general_check_null_func,
+                                                                            check_FR_DT, row, col_idx),
+
+                        "CMPLNT_TO_DT": lambda row, col_idx: general_check_col_func(general_check_null_func,
+                                                                            check_TO_DT, row, col_idx),
+
+                        "RPT_DT": lambda row, col_idx: general_check_col_func(general_check_null_func,
+                                                                            check_RPT_DT, row, col_idx),
+
+                        "CMPLNT_FR_TM": lambda row, col_idx: general_check_col_func(general_check_null_func,
+                                                                            check_FR_TM, row, col_idx),
+
+                        "LOC_OF_OCCUR_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
+                                                                            check_LOC_DESC, row, col_idx),
+                        "PREM_TYP_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
+                                                                            check_PREM_DESC, row, col_idx)}
                         
     # check each single ****ing cell in the data frame
     sanity_output = df.map(lambda x: check_row(x, check_col_func_dict)).collect()
