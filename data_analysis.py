@@ -41,79 +41,42 @@ if __name__ == "__main__":
                 output.append("VALID")
         return output
 
-    # ASHEN COLUMNS
-    ashen_columns = ["BORO_NM",  # 463 blank, 6 vals
-                     "ADDR_PCT_CD", # 390 blank, 78 vals
-                     "PARKS_NM", # 5093632 blank, 864 vals
-                     "HADEVELOPT", # 4848026 blank, 279 vals
-                     "X_COORD_CD", # 188146 blank, 69533 vals
-                     "Y_COORD_CD", # 188146 blank, 72317 vals
-                     "Latitude", # 188146 blank, 112804 vals
-                     "Longitude", # 188146 blank, 112808 vals
-                     "Lat_Lon"] # 188146 blank, 112827 vals
-    #ashen_dict = {}
-    #for col in ashen_columns:
-    #    ashen_dict[col] = groupby_and_count(df, col2idx[col]).collect()
-
-    # ZYU COLUMNS
-    zyu_columns = ["CMPLNT_NUM",       # 0 blank,     5101231 vals
-                   "KY_CD",            # 0 blank,     74 vals
-                   "OFNS_DESC",        # 18840 blank, 71 vals
-                   "PD_CD",            # 4574 blank,  416 vals
-                   "PD_DESC",          # 4574 blank,  404 vals
-                   "CRM_ATPT_CPTD_CD", # 7 blank,     3 vals
-                   "LAW_CAT_CD",       # 0 blank,     3 vals
-                   "JURIS_DESC"]       # 0 blank,     25 vals
-    #zyu_dict = {}
-    #for col in zyu_columns:
-    #    zyu_dict[col] = groupby_and_count(df, col2idx[col]).collect()
-    #
-    #for key in zyu_dict:
-    #    print(key, len(zyu_dict[key]))
-    #    for item in zyu_dict[key]:
-    #        if item[0] == "":
-    #            print(key, item)
-
-
-    xzhang_columns = ['CMPLNT_FR_DT', # 655 null 
-                      'CMPLNT_FR_TM', # 45 null
-                      'CMPLNT_TO_DT', # 1391478 null
-                      'CMPLNT_TO_TM', # 1387785 null
-                      'RPT_DT', # 0 null
-                      'LOC_OF_OCCUR_DESC', # 1127128 " ", 213 "  "
-                      'PREM_TYP_DESC' ] # 33279 null
-
-
-    all_column = ["BORO_NM",  # 463 blank, 6 vals
-                   "ADDR_PCT_CD", # 390 blank, 78 vals
-                   "PARKS_NM", # 5093632 blank, 864 vals
-                   "HADEVELOPT", # 4848026 blank, 279 vals
-                   "X_COORD_CD", # 188146 blank, 69533 vals
-                   "Y_COORD_CD", # 188146 blank, 72317 vals
-                   "Latitude", # 188146 blank, 112804 vals
-                   "Longitude", # 188146 blank, 112808 vals
-                   "Lat_Lon", # 188146 blank, 112827 vals
-                   "CMPLNT_NUM",       # 0 blank,     5101231 vals
-                   "KY_CD",            # 0 blank,     74 vals
-                   "OFNS_DESC",        # 18840 blank, 71 vals
-                   "PD_CD",            # 4574 blank,  416 vals
-                   "PD_DESC",          # 4574 blank,  404 vals
-                   "CRM_ATPT_CPTD_CD", # 7 blank,     3 vals
-                   "LAW_CAT_CD",       # 0 blank,     3 vals
-                   "JURIS_DESC",       # 0 blank,     25 vals
-                   "CMPLNT_FR_DT",
-                   "CMPLNT_FR_TM",
-                   "CMPLNT_TO_DT",
-                   "CMPLNT_TO_TM",
-                   "RPT_DT",
-                   "LOC_OF_OCCUR_DESC",
-                   "PREM_TYP_DESC"]
+    all_column = ["BORO_NM",           # 463 blank,     6 vals
+                  "ADDR_PCT_CD",       # 390 blank,     78 vals
+                  "PARKS_NM",          # 5093632 blank, 864 vals
+                  "HADEVELOPT",        # 4848026 blank, 279 vals
+                  "X_COORD_CD",        # 188146 blank,  69533 vals
+                  "Y_COORD_CD",        # 188146 blank,  72317 vals
+                  "Latitude",          # 188146 blank,  112804 vals
+                  "Longitude",         # 188146 blank,  112808 vals
+                  "Lat_Lon",           # 188146 blank,  112827 vals
+                  "CMPLNT_NUM",        # 0 blank,       5101231 vals
+                  "KY_CD",             # 0 blank,       74 vals
+                  "OFNS_DESC",         # 18840 blank,   71 vals
+                  "PD_CD",             # 4574 blank,    416 vals
+                  "PD_DESC",           # 4574 blank,    404 vals
+                  "CRM_ATPT_CPTD_CD",  # 7 blank,       3 vals
+                  "LAW_CAT_CD",        # 0 blank,       3 vals
+                  "JURIS_DESC",        # 0 blank,       25 vals
+                  "CMPLNT_FR_DT",      # 655 blank,     6372 vals
+                  "CMPLNT_FR_TM",      # 48 blank,      1443 vals
+                  "CMPLNT_TO_DT",      # 1391478 blank, 4828 vals
+                  "CMPLNT_TO_TM",      # 1387785 blank, 1442 vals
+                  "RPT_DT",            # 0 blank,       3652 vals
+                  "LOC_OF_OCCUR_DESC", # 1127128 blank, 7 vals (213 " ")
+                  "PREM_TYP_DESC"]     # 33279 blank,   71 vals
     #all_dict = {}
     #for col in all_column:
     #    all_dict[col] = groupby_and_count(df, col2idx[col]).collect()
 
     #with open('all_dict', 'wb') as f:
     #    pickle.dump(all_dict, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    #for key in all_dict:
+    #    print(key, len(all_dict[key]))
+    #    for item in all_dict[key]:
+    #        if item[0] == "":
+    #            print(key, item)
 
     def duplicate_key(counts):
         '''
@@ -124,47 +87,85 @@ if __name__ == "__main__":
            key_list.append(x[0][0])
         return (len(key_list) != len(set(key_list)))
 
-    #KY_counts = df.map(lambda x: ((x[6], x[7]),1)).reduceByKey(add).sortBy(lambda x: x[0])
+    KY_counts = df.map(lambda x: ((x[6], x[7]),1)).reduceByKey(add).sortBy(lambda x: x[0])
     #PD_counts = df.map(lambda x: ((x[8], x[9]),1)).reduceByKey(add).sortBy(lambda x: x[0])
     #PD_LAW = df.map(lambda x: ((x[8], x[11]),1)).reduceByKey(add).sortBy(lambda x: x[0])
-    #PD_KY = df.map(lambda x: ((x[8], x[9], x[6], x[7]),1)).reduceByKey(add).sortBy(lambda x: x[0])
-
+    PD_KY = df.map(lambda x: ((x[8], x[6], x[9], x[7]),1)).reduceByKey(add).sortBy(lambda x: x[0])
+    ADDR_BORO = df.map(lambda x: ((x[14], x[13]),1)).reduceByKey(add).sortBy(lambda x: x[0])
+    
     #print(duplicate_key(KY_counts)) #True
     #print(duplicate_key(PD_counts)) #False
     #print(duplicate_key(PD_LAW))    #False
     #print(duplicate_key(PD_KY))     #True
+    #print(duplicate_key(ADDR_BORO)) #True
 
+    # Save for future reference
     #with open('KY_counts', 'wb') as f:
     #    pickle.dump(KY_counts.collect(), f, protocol=pickle.HIGHEST_PROTOCOL)
 
     #with open('PD_KY', 'wb') as f:
     #    pickle.dump(PD_KY.collect(), f, protocol=pickle.HIGHEST_PROTOCOL)
 
+    #with open('ADDR_BORO', 'wb') as f:
+    #    pickle.dump(ADDR_BORO.collect(), f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def pair_dictionary(counts):
+        '''
+        Return (code, description) pair dictionary
+        For each code, the valid description is the description with the most counts
+        '''
+        pairs = {}
+        code = None
+        for x in counts.collect():
+            if x[0][0] != code:
+                code = x[0][0]
+                max_value = x[1]
+                pairs[x[0][0]] = [x[0][1]]
+            else:
+                if x[1] > max_value:
+                    max_value = x[1]
+                    pairs[x[0][0]] = [x[0][1]]
+        return pairs
+
+    KY_dict = pair_dictionary(KY_counts)
+    KY_dict['120'].append('ENDAN WELFARE INCOMP')
+    KY_dict['343'].append('THEFT OF SERVICES')
+    KY_dict['345'].append('ENDAN WELFARE INCOMP')
+    KY_dict['360'] = ['LOITERING FOR DRUG PURPOSES']
+    KY_dict['364'].append('AGRICULTURE & MRKTS LAW-UNCLASSIFIED')
+    KY_dict['677'].append('NYS LAWS-UNCLASSIFIED VIOLATION')
+    
+    PDKY_dict = pair_dictionary(PD_KY)
+    ADDR_dict = pair_dictionary(ADDR_BORO)
+
+    #for key in sorted(ADDR_dict):
+    #    print(key, ADDR_dict[key])
+
     # NULL values for each columns
     null_vals_dict = {"BORO_NM":[""],
-                 "ADDR_PCT_CD":[""],
-                 "PARKS_NM":[""],
-                 "HADEVELOPT":[""],
-                 "X_COORD_CD":[""],
-                 "Y_COORD_CD":[""],
-                 "Latitude":[""],
-                 "Longitude":[""],
-                 "Lat_Lon":[""],
-                 "CMPLNT_NUM":[""],
-                 "KY_CD":[""],
-                 "OFNS_DESC":[""],
-                 "PD_CD":[""],
-                 "PD_DESC":[""],
-                 "CRM_ATPT_CPTD_CD":[""],
-                 "LAW_CAT_CD":[""],
-                 "JURIS_DESC":[""],
-                 "CMPLNT_FR_DT":[""],
-                 "CMPLNT_FR_TM":[""],
-                 "CMPLNT_TO_DT":[""],
-                 "CMPLNT_TO_TM":[""],
-                 "RPT_DT":[""],
-                 "LOC_OF_OCCUR_DESC":[""],
-                 "PREM_TYP_DESC":[""]}
+                      "ADDR_PCT_CD":[""],
+                      "PARKS_NM":[""],
+                      "HADEVELOPT":[""],
+                      "X_COORD_CD":[""],
+                      "Y_COORD_CD":[""],
+                      "Latitude":[""],
+                      "Longitude":[""],
+                      "Lat_Lon":[""],
+                      "CMPLNT_NUM":[""],
+                      "KY_CD":[""],
+                      "OFNS_DESC":[""],
+                      "PD_CD":[""],
+                      "PD_DESC":[""],
+                      "CRM_ATPT_CPTD_CD":[""],
+                      "LAW_CAT_CD":[""],
+                      "JURIS_DESC":[""],
+                      "CMPLNT_FR_DT":[""],
+                      "CMPLNT_FR_TM":[""],
+                      "CMPLNT_TO_DT":[""],
+                      "CMPLNT_TO_TM":[""],
+                      "RPT_DT":[""],
+                      "LOC_OF_OCCUR_DESC":[""],
+                      "PREM_TYP_DESC":[""]}
 
     # column check function
     def general_check_col_func(check_null_func, check_valid_func, row, col_idx):
@@ -175,10 +176,8 @@ if __name__ == "__main__":
         else:
             return "VALID"
 
-
     def general_check_null_func(row, col_idx):
         return all_columns[col_idx] in null_vals_dict and row[col_idx] in null_vals_dict[all_columns[col_idx]]
-
 
     def check_loc(loc_str):
         all_numbers = loc_str[1:-1].split(",")
@@ -199,9 +198,12 @@ if __name__ == "__main__":
 
     # check functions for each columns
     def check_valid_BORO_NM(row, col_idx):
+        code = row[col2idx["ADDR_PCT_CD"]]
         if not format_re_dict["TEXT"](row, col_idx):
             return False
         elif row[col_idx] not in ["BRONX", "BROOKLYN", "MANHATTAN", "QUEENS", "STATEN ISLAND"]:
+            return False
+        elif row[col_idx] not in ADDR_dict[code]:
             return False
         else:
             return True
@@ -229,7 +231,48 @@ if __name__ == "__main__":
             return False
         else:
             return True
+   
+    def check_valid_three_digit(row, col_idx):
+        if not format_re_dict["POS_INT"](row, col_idx):
+            return False
+        elif int(row[col_idx]) < 100 or int(row[col_idx]) > 1000:
+            return False
+        else:
+            return True    
 
+    def check_valid_KY(row, col_idx):
+        code = row[col2idx["PD_CD"]]
+        if check_valid_three_digit(row, col_idx) == False:
+            return False
+        elif row[col_idx] not in PDKY_dict[code]:
+            return False
+        else:
+            return True
+
+    def check_valid_OFNS_DESC(row, col_idx):
+        code = row[col2idx["KY_CD"]]
+        if not format_re_dict["TEXT"](row, col_idx):
+            return False
+        elif row[col_idx] not in KY_dict[code]:
+            return False
+        else:
+            return True
+
+    def check_valid_CRM(row, col_idx):
+        if not format_re_dict["TEXT"](row, col_idx):
+            return False
+        elif row[col_idx] not in ["COMPLETED", "ATTEMPTED"]:
+            return False
+        else:
+            return True
+ 
+    def check_valid_LAW(row, col_idx):
+        if not format_re_dict["TEXT"](row, col_idx):
+            return False
+        elif row[col_idx] not in ["FELONY", "MISDEMEANOR", "VIOLATION"]:
+            return False
+        else:
+            return True
 
     def check_FR_DT(row, col_idx):
         FR_numbers = row[col_idx].split("/")
@@ -321,17 +364,8 @@ if __name__ == "__main__":
         if newDate.year < 2006 or newDate.year > 2015 :
             return False
 
-    def check_LOC_DESC(row, col_idx):
-        if not format_re_dict["TEXT"](row, col_idx):
-            return False
-
-    def check_PREM_DESC(row, col_idx):
-        if not format_re_dict["TEXT"](row, col_idx):
-            return False
-
-
     check_col_func_dict = {
-                        # valid text + within 5 district
+                        # valid text + within 5 district + mapping with ADDR_PCT_CD
                         "BORO_NM": lambda row, col_idx: general_check_col_func(general_check_null_func,
                                                                                   check_valid_BORO_NM, row, col_idx),
                         # any valid pos int
@@ -351,37 +385,38 @@ if __name__ == "__main__":
                                                                                   format_re_dict["POS_INT"], row, col_idx),
                         # valid float + within NYC
                         "Latitude": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                check_valid_Latitude, row, col_idx),
+                                                                                  check_valid_Latitude, row, col_idx),
                         # valid float + within NYC
                         "Longitude": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                 check_valid_Longitude, row, col_idx),
+                                                                                  check_valid_Longitude, row, col_idx),
                         # valid loc + should be consistent with previous columns
                         "Lat_Lon": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                               check_valid_Lat_Lon, row, col_idx),
+                                                                                  check_valid_Lat_Lon, row, col_idx),
                         # any valid pos int
                         "CMPLNT_NUM": lambda row, col_idx: general_check_col_func(general_check_null_func,
                                                                                   format_re_dict["POS_INT"], row, col_idx),
-                        # any valid pos int
+                        # 3 digit pos int + mapping with PD_CD
                         "KY_CD": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                  format_re_dict["POS_INT"], row, col_idx),
-                        # any valid string
+                                                                                  check_valid_KY, row, col_idx),
+                        # any valid string + mapping with KY_CD
                         "OFNS_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                  format_re_dict["TEXT"], row, col_idx),
-                        # any valid pos int
+                                                                                  check_valid_OFNS_DESC, row, col_idx),
+                        # 3 digit pos int
                         "PD_CD": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                  format_re_dict["POS_INT"], row, col_idx),
+                                                                                  check_valid_three_digit, row, col_idx),
                         # any valid string
                         "PD_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
                                                                                   format_re_dict["TEXT"], row, col_idx),
-                        # any valid string
+                        # completed/attempted
                         "CRM_ATPT_CPTD_CD": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                  format_re_dict["TEXT"], row, col_idx),
-                        # any valid string
+                                                                                  check_valid_CRM, row, col_idx),
+                        # felony/misdemeanor/violation
                         "LAW_CAT_CD": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                                  format_re_dict["TEXT"], row, col_idx),
+                                                                                  check_valid_LAW, row, col_idx),
                         # any valid string
                         "JURIS_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
                                                                                   format_re_dict["TEXT"], row, col_idx),
+
                         "CMPLNT_FR_DT": lambda row, col_idx: general_check_col_func(general_check_null_func,
                                                                             check_FR_DT, row, col_idx),
 
@@ -394,12 +429,16 @@ if __name__ == "__main__":
                         "CMPLNT_FR_TM": lambda row, col_idx: general_check_col_func(general_check_null_func,
                                                                             check_FR_TM, row, col_idx),
 
+                        "CMPLNT_TO_TM": lambda row, col_idx: general_check_col_func(general_check_null_func,
+                                                                            check_TO_TM, row, col_idx),
+                        # any valid string
                         "LOC_OF_OCCUR_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                            check_LOC_DESC, row, col_idx),
+                                                                                  format_re_dict["TEXT"], row, col_idx),
+                        # any valid string
                         "PREM_TYP_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
-                                                                            check_PREM_DESC, row, col_idx)}
+                                                                                  format_re_dict["TEXT"], row, col_idx)}
                         
     # check each single ****ing cell in the data frame
     sanity_output = df.map(lambda x: check_row(x, check_col_func_dict)).collect()
-    print(sanity_output)
-
+    for x in sanity_output[0:100]:
+        print(x)
