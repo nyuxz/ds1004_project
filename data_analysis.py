@@ -5,7 +5,7 @@ import pickle
 from operator import add
 from pyspark import SparkContext
 from csv import reader
-import datetime
+from datetime import datetime
 
 def groupby_and_count(df, col_idx):
     """
@@ -15,6 +15,61 @@ def groupby_and_count(df, col_idx):
     :return:
     """
     return df.map(lambda x: (x[col_idx], 1)).groupByKey().mapValues(lambda x: len(x))
+
+
+# boro_dist = groupby_and_count(df, col2idx["BORO_NM"])
+# boro_dist = boro_dist.collect()
+# boro_dist
+# [('BRONX', 1103514), ('', 463), ('STATEN ISLAND', 243790), ('BROOKLYN', 1526213), ('MANHATTAN', 1216249), ('QUEENS', 1011002)]
+
+
+def date_hisogram(df, col_idx):
+    """
+    Function that takes in a spark rdd of data and return the count of rows for each year
+    :param df:
+    :return:
+    """
+    min_date = datetime.strptime("01/01/2006", "%m/%d/%Y")
+    date_col = col_idx['RPT_DT']
+    def get_date(row):
+        if len(row[date_col]) < 4:
+            return None
+        else:
+            date_obj = datetime.strptime(row[date_col], "%m/%d/%Y")
+            if date_obj <= min_date:
+                return None
+            else:
+                return date_obj
+    return df.map(lambda x: (get_date(x), 1)).groupByKey().mapValues(lambda x: len(x))
+
+
+def year_hisogram(df, col_idx):
+    """
+    Function that takes in a spark rdd of data and return the count of rows for each day
+    :param df:
+    :return:
+    """
+    report_date = col_idx['RPT_DT']
+    def get_year(row):
+        if len(row[report_date]) < 4:
+            return 2004
+        else:
+            year = int(row[report_date][-4:])
+            if year <= 2004:
+                return 2004
+            else:
+                return year
+    return df.map(lambda x: (get_year(x), 1)).groupByKey().mapValues(lambda x: len(x))
+
+#year_df = year_hisogram(df, col2idx)
+#year_df = year_df.collect()
+#year_df
+#[(2010, 509725), (2011, 498198), (2012, 504128), (2013, 494958), (2004, 8670), (2014, 490363), (2005, 10767), (2015, 468576), (2006, 539024), (2007, 537201), (2008, 528675), (2009, 510946)]
+
+
+
+
+
 
 if __name__ == "__main__":
     sc = SparkContext()
