@@ -5,7 +5,7 @@ import pickle
 from operator import add
 from pyspark import SparkContext
 from csv import reader
-import datetime
+from datetime import datetime
 
 def groupby_and_count(df, col_idx):
     """
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     def check_valid_Lat_Lon(row, col_idx):
         if not format_re_dict["LOCATION"](row, col_idx):
             return False
-        elif '({0}, {1})'.format(row[col2idx["Latitude"]], row[col2idx["Longitude"]]) == row[col_idx]:
+        elif '({0}, {1})'.format(row[col2idx["Latitude"]], row[col2idx["Longitude"]]) != row[col_idx]:
             return False
         else:
             return True
@@ -274,95 +274,71 @@ if __name__ == "__main__":
         else:
             return True
 
+
     def check_FR_DT(row, col_idx):
         FR_numbers = row[col_idx].split("/")
-        if len(FR_numbers) != 3:
-            return False
         try:
-            newDate = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]))
-            return True
+            fr_dt = datetime.strptime(row[col_idx],'%m/%d/%Y')
+            if fr_dt.year < 1900 or fr_dt.year > 2016 :
+                return False
+            else:
+                return True
         except ValueError:
             return False
-        if newDate.year < 2006 or newDate.year > 2015 :
-            return False
-
-
+        
+    
     def check_TO_DT(row, col_idx):
-        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
-        TO_numbers = row[col_idx].split("/")
-        if len(TO_numbers) != 3:
-            return False
+        fr_dt = row[col2idx["CMPLNT_FR_DT"]]
         try:
-            newDate = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]))
-            return True
+            to_dt = datetime.strptime(row[col_idx],'%m/%d/%Y')
+            fr_dt = None if len(fr_dt)<3 else datetime.strptime(fr_dt,'%m/%d/%Y')
+            if to_dt.year < 1900 or to_dt.year > 2016 :
+                return False
+            elif fr_dt is not None and fr_dt > to_dt:
+                return False
+            else:
+                return True
         except ValueError:
             return False
-        fr_dt = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]))
-        to_dt = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]))
-        if not fr_dt < to_dt:
-            return False 
-        if newDate.year < 2006 or newDate.year > 2015 :
-            return False
-
+                
 
     def check_RPT_DT(row, col_idx):
-        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
-        RPT_numbers = row[col_idx].split("/")
-        if len(RPT_numbers) != 3:
-            return False
+        fr_dt = row[col2idx["CMPLNT_FR_DT"]]
         try:
-            newDate = datetime.datetime(int(RPT_numbers[2]),int(RPT_numbers[0]),int(RPT_numbers[1]))
-            return True
+            fr_dt = None if len(fr_dt)<3 else datetime.strptime(fr_dt,'%m/%d/%Y')
+            rpt_dt = datetime.strptime(row[col_idx],'%m/%d/%Y')
+            if rpt_dt.year < 2006 or rpt_dt.year > 2015 :
+                return False
+            elif fr_dt is not None and fr_dt > rpt_dt: 
+                return False
+            else:
+                return True
         except ValueError:
-            return False
-        fr_dt = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]))
-        rpt_dt = datetime.datetime(int(RPT_numbers[2]),int(RPT_numbers[0]),int(RPT_numbers[1]))
-        if not fr_dt < rpt_dt:
-            return False
-        if newDate.year < 2006 or newDate.year > 2015 :
-            return False 
-
-
+            return False  
+            
     def check_FR_TM(row, col_idx):
-        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
-        FR_TM_numbers = row[col_idx].split(":")
-        if len(FR_numbers) != 3:
-            return False
-        if len(FR_TM_numbers) != 3:
-            return False
         try:
-            newDate = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]),int(FR_TM_numbers[0]),int(FR_TM_numbers[1]),int(FR_TM_numbers[2]))
+            fr_tm = datetime.strptime(row[col_idx],'%H:%M:%S')
             return True
         except ValueError:
             return False
-        if newDate.year < 2006 or newDate.year > 2015 :
-            return False
-
             
     def check_TO_TM(row, col_idx):
-        FR_numbers = row[col2idx["CMPLNT_FR_DT"]].split("/")
-        FR_TM_numbers = row[col2idx["CMPLNT_FR_TM"]].split(":")
-        TO_numbers = row[col2idx["CMPLNT_TO_DT"]].split("/")
-        TO_TM_numbers = row[col_idx].split(":")
-        if len(FR_TM_numbers) != 3:
-            return False
-        if len(FR_numbers) != 3:
-            return False
-        if len(TO_numbers) != 3:
-            return False
-        if len(TO_TM_numbers) != 3:
-            return False
+        fr_dt = row[col2idx["CMPLNT_FR_DT"]]
+        to_dt = row[col2idx["CMPLNT_TO_DT"]]
+        fr_tm = row[col2idx["CMPLNT_FR_TM"]]
+        if len(fr_dt)<3:
+            fr_dt = None
         try:
-            newDate = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]),int(TO_TM_numbers[0]),int(TO_TM_numbers[1]),int(TO_TM_numbers[2]))
-            return True
+            fr_tm = None if len(fr_tm)<3 or fr_tm == '24:00:00' else datetime.strptime(fr_tm,'%H:%M:%S')
+            to_tm = datetime.strptime(row[col_idx],'%H:%M:%S')
+            if fr_dt is not None and fr_tm is not None and fr_dt == to_dt and fr_tm > to_tm:
+                return False
+            else:
+                return True
         except ValueError:
             return False
-        fr_tm = datetime.datetime(int(FR_numbers[2]),int(FR_numbers[0]),int(FR_numbers[1]),int(FR_TM_numbers[0]),int(FR_TM_numbers[1]),int(FR_TM_numbers[2]))
-        to_tm = datetime.datetime(int(TO_numbers[2]),int(TO_numbers[0]),int(TO_numbers[1]),int(TO_TM_numbers[0]),int(TO_TM_numbers[1]),int(TO_TM_numbers[2]))
-        if not fr_tm < to_tm:
-            return False
-        if newDate.year < 2006 or newDate.year > 2015 :
-            return False
+
 
     check_col_func_dict = {
                         # valid text + within 5 district + mapping with ADDR_PCT_CD
@@ -442,3 +418,13 @@ if __name__ == "__main__":
     sanity_output = df.map(lambda x: check_row(x, check_col_func_dict)).collect()
     for x in sanity_output[0:100]:
         print(x)
+
+    # save
+    output = open('sanity_output.pkl', 'wb')
+    pickle.dump(sanity_output, output)
+    output.close()
+    
+
+
+
+
