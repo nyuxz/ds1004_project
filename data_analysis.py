@@ -17,10 +17,6 @@ def groupby_and_count(df, col_idx):
     return df.map(lambda x: (x[col_idx], 1)).groupByKey().mapValues(lambda x: len(x))
 
 
-# boro_dist = groupby_and_count(df, col2idx["BORO_NM"])
-# boro_dist = boro_dist.collect()
-# boro_dist
-# [('BRONX', 1103514), ('', 463), ('STATEN ISLAND', 243790), ('BROOKLYN', 1526213), ('MANHATTAN', 1216249), ('QUEENS', 1011002)]
 
 
 def date_hisogram(df, col_idx):
@@ -43,6 +39,7 @@ def date_hisogram(df, col_idx):
     return df.map(lambda x: (get_date(x), 1)).groupByKey().mapValues(lambda x: len(x))
 
 
+
 def year_hisogram(df, col_idx):
     """
     Function that takes in a spark rdd of data and return the count of rows for each day
@@ -61,13 +58,6 @@ def year_hisogram(df, col_idx):
                 return year
     return df.map(lambda x: (get_year(x), 1)).groupByKey().mapValues(lambda x: len(x))
 
-#year_df = year_hisogram(df, col2idx)
-#year_df = year_df.collect()
-#year_df
-#[(2010, 509725), (2011, 498198), (2012, 504128), (2013, 494958), (2004, 8670), (2014, 490363), (2005, 10767), (2015, 468576), (2006, 539024), (2007, 537201), (2008, 528675), (2009, 510946)]
-
-
-
 
 
 
@@ -79,6 +69,25 @@ if __name__ == "__main__":
     all_columns = df.first()
     col2idx = dict([(all_columns[i], i) for i in range(len(all_columns))])
     df = df.filter(lambda line: line != all_columns)
+
+
+    # How to get year data for visualization
+    # year_df = year_hisogram(df, col2idx)
+    # year_df = year_df.collect()
+    # year_df
+    # [(2010, 509725), (2011, 498198), (2012, 504128), (2013, 494958), (2004, 8670), (2014, 490363), (2005, 10767), (2015, 468576), (2006, 539024), (2007, 537201), (2008, 528675), (2009, 510946)]
+
+
+    # How to get boro data
+    # boro_dist = groupby_and_count(df, col2idx["BORO_NM"])
+    # boro_dist = boro_dist.collect()
+    # boro_dist
+    # [('BRONX', 1103514), ('', 463), ('STATEN ISLAND', 243790), ('BROOKLYN', 1526213), ('MANHATTAN', 1216249), ('QUEENS', 1011002)]
+
+
+    # How to get the date data for visualization
+    # date_df = date_hisogram(df, col2idx)
+    # date_df = date_df.collect()
 
     # Overview
     #nrow = df.count()
@@ -469,7 +478,6 @@ if __name__ == "__main__":
                         "PREM_TYP_DESC": lambda row, col_idx: general_check_col_func(general_check_null_func,
                                                                                   format_re_dict["TEXT"], row, col_idx)}
                         
-    # check each single ****ing cell in the data frame
     sanity_output = df.map(lambda x: check_row(x, check_col_func_dict)).collect()
     for x in sanity_output[0:100]:
         print(x)
