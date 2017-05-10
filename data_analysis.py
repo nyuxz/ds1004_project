@@ -64,11 +64,15 @@ def year_hisogram(df, col_idx):
 if __name__ == "__main__":
     sc = SparkContext()
     filename = sys.argv[1]
-  
+
+    filename = "FILE ON HDFS"
+    savename = "SAVE ON HDFS"
     df = sc.textFile(filename, 1).mapPartitions(lambda x: reader(x))
     all_columns = df.first()
     col2idx = dict([(all_columns[i], i) for i in range(len(all_columns))])
     df = df.filter(lambda line: line != all_columns)
+    need_df = df.map(lambda x:  (x[col2idx["PREM_TYP_DESC"]], x[col2idx["OFNS_DESC"]], x[col2idx["RPT_DT"]]))
+    need_df.saveAsTextFile()
 
 
     # How to get year data for visualization
